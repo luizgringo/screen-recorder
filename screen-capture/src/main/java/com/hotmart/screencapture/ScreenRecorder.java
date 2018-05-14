@@ -9,9 +9,18 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.Scanner;
 import java.util.Vector;
+import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 import javax.media.*;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * Main class that starts the Recording process of EasyCapture.
@@ -110,36 +119,60 @@ public class ScreenRecorder {
 		System.out.println("######### Starting Easy Capture Recorder #######");
 		Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 		System.out.println("Your Screen [Width,Height]:" + "["+ screen.getWidth() + "," + screen.getHeight() + "]");
-		Scanner sc = new Scanner(System.in);
+		//Scanner sc = new Scanner(System.in);
 		System.out.println("Rate 20 Frames/Per Sec.");
-		System.out.print("Do you wanna change the screen capture area (y/n) ? ");
-		if (sc.next().equalsIgnoreCase("y")) {
-			System.out.print("Enter the width:");
-			screenWidth = sc.nextInt();
-			System.out.print("Enter the Height:");
-			screenHeight = sc.nextInt();
-			System.out.println("Your Screen [Width,Height]:" + "["+ screen.getWidth() + "," + screen.getHeight() + "]");
-		}
 		
 		System.out.print("Now move to the screen you want to record");
 		
-		for(int i=0;i<5;i++){
-			System.out.print(".");
-			Thread.sleep(1000);
-		}
+	    //Create a new instance of the Firefox driver
+	    WebDriver driver = new FirefoxDriver();
+	    driver.manage().window().fullscreen();
+	 
+	    //Call the start method of ScreenRecorder to begin recording
 		File f = new File(store);
 		if(!f.exists()){
 			f.mkdir();
 		}
 		startRecord();
 		System.out.println("\nEasy Capture is recording now!!!!!!!");
+	 
+		driver.manage().timeouts().implicitlyWait(7, TimeUnit.SECONDS);
+		driver.get("http://www.hotmart.com/pt/"); 
 
-		System.out.println("Press e to exit:");
-		String exit = sc.next();
-		while (exit == null || "".equals(exit) || !"e".equalsIgnoreCase(exit)) {
-			System.out.println("\nPress e to exit:");
-			exit = sc.next();
-		}
+		//Create an action object called myMouse
+		Actions myMouse = new Actions(driver); 
+
+		WebElement entreLink = driver.findElement(By.linkText("Entre")); 
+		myMouse.moveToElement(entreLink).build().perform();   //Shows link
+		Thread.sleep(5000L);
+		entreLink.click();
+		
+		Thread.sleep(5000L);
+		
+		WebElement digiteSeuUsuarioLabel = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/div/div/div/div/div/div[2]/div[1]/div[2]/form[2]/div/span[1]/input"));
+		myMouse.moveToElement(digiteSeuUsuarioLabel).build().perform();   //home link
+		Thread.sleep(5000L);
+		digiteSeuUsuarioLabel.sendKeys("luiz.bueno@hotmart.com");
+		
+		Thread.sleep(5000L);
+		
+		WebElement senhaLink = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/div/div/div/div/div/div[2]/div[1]/div[2]/form[2]/div/span[2]/input")); 
+		myMouse.moveToElement(senhaLink).build().perform();
+		Thread.sleep(5000L);
+		
+		Thread.sleep(5000L);
+		
+		WebElement botaoEntrar = driver.findElement(By.xpath("/html/body/div[2]/div[1]/div/div/div/div/div/div/div[2]/div[1]/div[2]/form[2]/button")); 
+		myMouse.moveToElement(botaoEntrar).build().perform();
+		Thread.sleep(5000L);
+		botaoEntrar.click();
+		
+		Thread.sleep(5000L);
+ 
+	    //Close the browser
+	    driver.quit();
+	 
+	    //Call the stop method of ScreenRecorder to end the recording
 		record = false;
 		System.out.println("Easy Capture has stopped.");
 		//makeVideo(System.currentTimeMillis()+".mov");
