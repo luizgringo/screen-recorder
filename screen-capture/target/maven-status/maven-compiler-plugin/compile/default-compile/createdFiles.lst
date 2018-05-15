@@ -1,4 +1,7 @@
 com/hotmart/screencapture/SeScreenCastDemo.class
+com/hotmart/screencapture/JpegImagesToMovie.class
 com/hotmart/screencapture/SeScreenCastDemo$1.class
+com/hotmart/screencapture/JpegImagesToMovie$ImageSourceStream.class
 com/hotmart/screencapture/ScreenRecorder$1.class
 com/hotmart/screencapture/ScreenRecorder.class
+com/hotmart/screencapture/JpegImagesToMovie$ImageDataSource.class
